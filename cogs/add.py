@@ -108,6 +108,7 @@ class Add:
                 'dp': dp,
                 'gear_score': max(aap, ap) + dp,
                 'renown_score': math.trunc((ap+aap)/2 + dp),
+                'contractpay': contractpay,
                 'primary': isPrimary,
                 'member': discord_user.id,
             })
@@ -151,6 +152,7 @@ class Add:
                     'dp': character.dp,
                     'gear_score': character.gear_score,
                     'renown_score': character.renown_score,
+                    'contractpay': character.contractpay
                 })
 
                 historical_data = character.hist_data
@@ -164,6 +166,7 @@ class Add:
                     'level': level,
                     'gear_score': max(aap, ap) + dp,
                     'renown_score': math.trunc((ap+aap)/2 + dp),
+                    'contractpay': contractpay,
                     'char_class': new_char_class.upper(),
                     'updated': date,
                     'hist_data': historical_data

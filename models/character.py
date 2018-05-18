@@ -17,7 +17,8 @@ class Character(Document, ModelMixin):
         'aap',
         'dp',
         'gear_score',
-        'renown_score', 
+        'renown_score',
+        'contractpay', 
         'updated', 
         'progress', 
         'gear_pic', 
@@ -36,6 +37,7 @@ class Character(Document, ModelMixin):
     dp = IntField(max_length=5)
     gear_score = IntField(max_length=10)
     renown_score = IntField(max_length=10)
+    contractpay = StringField(max_length=5)
     updated = DateTimeField(default=datetime.now)
     progress = FloatField(default=0.0)
     gear_pic = URLField(default="https://i.imgur.com/UFViCXj.jpg")

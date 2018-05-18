@@ -9,6 +9,7 @@ from models.character import Character
 from models.historical import Historical
 from utils import *
 import math
+import re
 
 class Update:
     """Update commands."""
@@ -41,7 +42,8 @@ class Update:
             'aap': character.aap,
             'dp': character.dp,
             'gear_score': character.gear_score,
-            'renown_score': character.renown_score
+            'renown_score': character.renown_score,
+            'contractpay': character.contractpay
         })
         return update
 
@@ -81,6 +83,16 @@ class Update:
                     'updated': date,
                     'rank': rank,
                 })
+            elif attribute['name'] == 'contractpay':
+                #pattern = re.compile("\d{1,3}[km]/gi")
+                if re.match('(^\d{1,3}[km]$)|(^\d\.\d[m]$)',attribute['value']):
+                    character.update_attributes({
+                        attribute['name']: attribute['value'],
+                        'updated': date,
+                        'rank': rank,
+                    })
+                else:
+                    self.bot.say("Error: Format not valid. Examples: gsbot update contractpay 100k or gsbot update contractpay 3.5m")
             else:
                 character.update_attributes({
                     attribute['name']: attribute['value'],
@@ -130,6 +142,7 @@ class Update:
                 'level': level,
                 'gear_score': max(aap, ap) + dp,
                 'renown_score': math.trunc((ap+aap)/2 + dp),
+                'contractpay': contractpay,
                 'progress': level_percent,
                 'updated': date,
                 'hist_data': historical_data
