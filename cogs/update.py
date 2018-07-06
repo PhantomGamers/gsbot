@@ -36,7 +36,7 @@ class Update:
             'type': "update",
             'char_class':character.char_class.upper(),
             'timestamp': date,
-            'level': float(str(character.level) + '.' + str(round(character.progress))) ,
+            'level': float(str(character.level) + '.' + str(round(character.progress, 3))) ,
             'ap': character.ap,
             'aap': character.aap,
             'dp': character.dp,
@@ -80,7 +80,22 @@ class Update:
                     'renown_score': math.trunc((character.ap+character.aap)/2 + attribute['value']),
                     'updated': date,
                     'rank': rank,
+                    })
+
+            elif attribute['name']  == 'progress':
+                character.update_attributes({
+                    'progress': round(attribute['value'], 3),
+                    'updated': date,
+                    'rank': rank,
                 })
+                
+            elif attribute['name'] == 'lvl':
+                character.update_attributes({
+                    'lvl': attribute['value'],
+                    'updated': date,
+                    'rank': rank,
+                })
+                    
             else:
                 character.update_attributes({
                     attribute['name']: attribute['value'],
@@ -147,27 +162,42 @@ class Update:
     @update.command(pass_context=True)
     async def ap(self, ctx, ap: int, user: discord.User = None):
         """Updates user's main character's ap. **Officers can tag another user to update for them """
-        await self.update_attribute(ctx, {'name': 'ap', 'value': ap}, user)
+        if ap > 0 and ap < 1000:
+            await self.update_attribute(ctx, {'name': 'ap', 'value': ap}, user)
+        else:
+            await self.bot.say("AP value invalid, please enter a number between 0 and 999")
 
     @update.command(pass_context=True)
     async def aap(self, ctx, aap: int, user: discord.User = None):
         """Updates user's main character's aap. **Officers can tag another user to update for them """
-        await self.update_attribute(ctx, {'name': 'aap', 'value': aap}, user)
+        if aap > 0 and aap < 1000:
+            await self.update_attribute(ctx, {'name': 'aap', 'value': aap}, user)
+        else:
+            await self.bot.say("AAP value invalid, please enter a number between 0 and 999")
 
     @update.command(pass_context=True)
     async def dp(self, ctx, dp: int, user: discord.User = None):
         """Updates user's main character's dp. **Officers can tag another user to update for them """
-        await self.update_attribute(ctx, {'name': 'dp', 'value': dp}, user)
+        if dp > 0 and dp < 1000:
+            await self.update_attribute(ctx, {'name': 'dp', 'value': dp}, user)
+        else:
+            await self.bot.say("DP value invalid, please enter a number between 0 and 999")
 
     @update.command(pass_context=True)
     async def lvl(self, ctx, level: int, user: discord.User = None):
         """Updates user's main character's level. **Officers can tag another user to update for them """
-        await self.update_attribute(ctx, {'name': 'level', 'value': level}, user)
+        if level > 0 and level < 100:
+            await self.update_attribute(ctx, {'name': 'level', 'value': level}, user)
+        else:
+            await self.bot.say("Level value invalid. Please enter a number between 1 and 99.")
 
     @update.command(pass_context=True)
     async def progress(self, ctx, percent: float, user: discord.User = None):
         """Updates user's main character's level progress. **Officers can tag another user to update for them """
-        await self.update_attribute(ctx, {'name': 'progress', 'value': percent}, user)
+        if round(percent, 3) >= 0 and round(percent, 3) < 100:
+            await self.update_attribute(ctx, {'name': 'progress', 'value': percent}, user)
+        else:
+            await self.bot.say("Progress value invalid. Please enter a number with a maximum of three decimal places that's between 0.000 and 99.999")
 
     @update.command(pass_context=True)
     async def pic(self, ctx, url: str = None):
